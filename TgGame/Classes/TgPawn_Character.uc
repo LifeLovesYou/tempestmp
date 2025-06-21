@@ -1,0 +1,1 @@
+class TgPawn_Character extends TgPawn;

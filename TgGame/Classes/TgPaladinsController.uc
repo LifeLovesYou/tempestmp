@@ -1,0 +1,1 @@
+interface TgPaladinsController extends Interface;
