@@ -311,7 +311,6 @@ event sendMessagesToAll() {
     }
 }
 
-
 private function setChampionFromCName(TgPlayerController TgPC, string CName) {
     local int ChampionIndex;
     local Champions.ChampionData SelectedChampion;
