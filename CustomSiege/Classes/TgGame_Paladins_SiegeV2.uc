@@ -140,8 +140,22 @@ public event PostLogin(PlayerController NewPlayer)
             break;
         }
     }
+
+    SetTimer(30, false, 'somehowRestart');
 }
 
+
+private event somehowRestart() {
+    local TgPlayerController TgPC;
+    foreach AllActors(class'TgPlayerController', TgPC) {
+        TgPC.ClientMessage("switch", , 15);
+    }
+    if(Role ==  ROLE_Authority) {
+        ProcessServerTravel("BMM_P_v01", false);
+        `log("Restarting");
+    }
+    `log("Restarting 2");
+}
 
 private function precache(TgPlayerController TgPC) {
     local int i;
@@ -202,9 +216,19 @@ public event PostBeginPlay()
 public function TaskforceWin(Int nTaskForce, EVictoryType VictoryType)
 {
     super.TaskforceWin(nTaskForce, VictoryType);
+
+    SetTimer(5.0, false, 'somehowPlayPOTG');
     //m_TgG.Restart()
 }
 
+private event somehowPlayPOTG() {
+    local TgPlayerController TgPC;
+    foreach AllActors(class'TgPlayerController', TgPC) {
+        if(TgPC.IsLocalPlayerController()) {
+            
+        }
+    }
+}
 
 private event runTotalMayhem() {
     local TgPlayerController TgPC;
@@ -380,7 +404,9 @@ simulated function SpawnPawn(TgPlayerController TgPC, int BotId, int SkinId, int
 
 function UnpossessAndDestroy(TgPlayerController TgPC)
 {
-    //TgPC.SetReadyToPlay();
+    TgPC.Pawn.Destroy();
+    TgPC.UnPossess();
+    TgPC.SetReadyToPlay();
     //return;    
 }
 
