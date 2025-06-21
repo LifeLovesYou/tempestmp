@@ -4,6 +4,8 @@ var TgPlayerController m_TgPC;
 var float CurrentTime, StartTime;
 var bool bHasStarted;
 
+var TgChampions champions;
+
 function PostRender(Canvas Canvas)
 {
     super.PostRender(Canvas);
@@ -54,6 +56,9 @@ event bool Init(out string OutError)
 
     SetConsoleTarget(0);
 
+    Champions = new class'TgChampions';
+    Champions.loadChampions();
+
     return super.Init(OutError);
 }
 
@@ -76,6 +81,7 @@ exec function SetConsoleTarget(int PlayerIndex)
 }
 
 public function findPCAndAttachCM() {
+    local int i;
 	m_TgPC = TgPlayerController(self.GetPlayerOwner(0).Actor);
 	 
 	m_TgPC.CheatClass = class'TgBattleCheatManager';
@@ -85,6 +91,7 @@ public function findPCAndAttachCM() {
         m_TgPC.CheatManager = new(m_TgPC) class'TgBattleCheatManager';
         if (m_TgPC.CheatManager != None)
         {
+            //projectiles
             m_TgPC.CheatManager.InitCheatManager();
 			m_TgPC.ConsoleCommand("setclientvalue Default__TgPawn_evie m_bAirAccuracyPenalty False");
             m_TgPC.ConsoleCommand("setclientvalue Default__TgPawn_grover m_bAirAccuracyPenalty False");
@@ -94,10 +101,33 @@ public function findPCAndAttachCM() {
             m_TgPC.ConsoleCommand("setclientvalue Default__TgPawn_bombking m_bAirAccuracyPenalty False");
             m_TgPC.ConsoleCommand("setclientvalue Default__TgPawn_barik m_bAirAccuracyPenalty False");
             m_TgPC.ConsoleCommand("setclientvalue Default__TgPawn_makoa m_bAirAccuracyPenalty False");
+            m_TgPC.ConsoleCommand("setclientvalue Default__TgPawn_barriertank m_bAirAccuracyPenalty False");
+            m_TgPC.ConsoleCommand("setclientvalue Default__TgPawn_darklord m_bAirAccuracyPenalty False");
+            m_TgPC.ConsoleCommand("setclientvalue Default__TgPawn_Fairy m_bAirAccuracyPenalty False");
+            m_TgPC.ConsoleCommand("setclientvalue Default__TgPawn_Flak m_bAirAccuracyPenalty False");
+            m_TgPC.ConsoleCommand("setclientvalue Default__TgPawn_MalDamba m_bAirAccuracyPenalty False");
+            m_TgPC.ConsoleCommand("setclientvalue Default__TgPawn_Oracle m_bAirAccuracyPenalty False");
+            //hitscans
+            m_TgPC.ConsoleCommand("setclientvalue Default__TgPawn_astro m_bAirAccuracyPenalty False");
+            m_TgPC.ConsoleCommand("setclientvalue Default__TgPawn_Kinessa m_bAirAccuracyPenalty False");
+            m_TgPC.ConsoleCommand("setclientvalue Default__TgPawn_lex m_bAirAccuracyPenalty False");
+            m_TgPC.ConsoleCommand("setclientvalue Default__TgPawn_owl m_bAirAccuracyPenalty False");
+            m_TgPC.ConsoleCommand("setclientvalue Default__TgPawn_ruckus m_bAirAccuracyPenalty False");
+            m_TgPC.ConsoleCommand("setclientvalue Default__TgPawn_skye m_bAirAccuracyPenalty False");
+            m_TgPC.ConsoleCommand("setclientvalue Default__TgPawn_tyra m_bAirAccuracyPenalty False");
+            m_TgPC.ConsoleCommand("setclientvalue Default__TgPawn_viktor m_bAirAccuracyPenalty False");
+            m_TgPC.ConsoleCommand("setclientvalue Default__TgPawn_ying m_bAirAccuracyPenalty False");
 			m_TgPC.ConsoleCommand("changetaskforce 1");
 
+
+            for (i = 0; i < Champions.ChampionDatabase.Length; i++) {
+                //TgBattleCheatManager(m_TgPC.CheatManager).Outer.ConsoleCommand("testprecache" @ Champions.ChampionDatabase[i].BotId @ Champions.ChampionDatabase[i].SkinId @ Champions.ChampionDatabase[i].DeviceSkinId @ Champions.ChampionDatabase[i].HeadId);
+                m_TgPC.ConsoleCommand("switchclass" @ Champions.ChampionNames[i]);
+            }
+
             `Log("CheatManager successfully created and initialized : " @ m_TgPC.CheatManager.Name @ ":" @ m_TgPC.CheatManager.Outer.Name);
-		
+
+            /*
 			m_TgPC.ConsoleCommand("testprecache 2205 15292 13168 1");
 			m_TgPC.ConsoleCommand("testprecache 2404 16977 16981 1");
 			m_TgPC.ConsoleCommand("testprecache 2073 12200 13169 1");
@@ -127,7 +157,6 @@ public function findPCAndAttachCM() {
 			m_TgPC.ConsoleCommand("testprecache 2393 16810 16811 1");
 			m_TgPC.ConsoleCommand("testprecache 2267 13212 13221 1");
 
-			/*
             m_TgPC.EnsureBotPrecache(2205 15292 15160 13168);
             m_TgPC.EnsureBotPrecache(2404 16977 18859 16981);
             m_TgPC.EnsureBotPrecache(2073 12200 15217 13169);
